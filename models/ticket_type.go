@@ -9,3 +9,15 @@ type TicketType struct {
 	Default                 bool        `json:"default"`
 	EnabledForFutureInboxes bool        `json:"enabledForFutureInboxes"`
 }
+
+type TicketTypesResponse struct {
+	TicketTypes []TicketStatus `json:"tickettypes"`
+	Meta        Meta           `json:"meta"`
+	Pagination  Pagination     `json:"pagination"`
+	Included    IncludedData   `json:"included"`
+}
+
+type TicketTypeResponse struct {
+	TicketType TicketType   `json:"tickettype"`
+	Included   IncludedData `json:"included"`
+}

@@ -12,13 +12,13 @@ type TicketStatus struct {
 }
 
 type TicketStatusesResponse struct {
-	TicketStatuses []TicketStatus `json:"ticketStatuses"`
+	TicketStatuses []TicketStatus `json:"ticketstatuses"`
 	Meta           Meta           `json:"meta"`
 	Pagination     Pagination     `json:"pagination"`
 	Included       IncludedData   `json:"included"`
 }
 
 type TicketStatusResponse struct {
-	TicketStatus TicketStatus `json:"ticketStatus"`
+	TicketStatus TicketStatus `json:"ticketstatus"`
 	Included     IncludedData `json:"included"`
 }

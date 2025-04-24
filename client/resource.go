@@ -51,10 +51,6 @@ func (s *Service[T, L]) Get(ctx context.Context, id int) (*T, error) {
 
 // List retrieves a list of resources with optional filters
 func (s *Service[T, L]) List(ctx context.Context, params url.Values) (*L, error) {
-	if params == nil {
-		params = url.Values{}
-	}
-	params.Add("includes", "all")
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet,
 		fmt.Sprintf("%s/%s.json?%s", s.client.baseURL, s.resource, params.Encode()), nil)
 	if err != nil {

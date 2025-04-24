@@ -42,6 +42,12 @@ func main() {
 		handleCompanies(ctx, c, *action, *id)
 	case "users":
 		handleUsers(ctx, c, *action, *id)
+	case "tags":
+		handleTags(ctx, c, *action, *id)
+	case "ticketstatuses":
+		handleTicketStatuses(ctx, c, *action, *id)
+	case "tickettypes":
+		handleTicketTypes(ctx, c, *action, *id)
 	default:
 		log.Fatalf("Unsupported resource: %s", *resource)
 	}
@@ -257,6 +263,162 @@ func handleUsers(ctx context.Context, c *client.Client, action string, id int) {
 			FirstName: "Jane",
 		}
 		updated, err := service.Update(ctx, id, user)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleTags handles tag-related actions
+func handleTags(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.Tags
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		tag, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(tag)
+
+	case "list":
+		tags, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(tags)
+
+	case "create":
+		// Example tag creation
+		tag := &models.Tag{
+			Name: "Example Tag",
+		}
+		created, err := service.Create(ctx, tag)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example tag update
+		tag := &models.Tag{
+			Name: "Updated Tag",
+		}
+		updated, err := service.Update(ctx, id, tag)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleTicketStatuses handles ticket status-related actions
+func handleTicketStatuses(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.TicketStatuses
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		status, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(status)
+
+	case "list":
+		statuses, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(statuses)
+
+	case "create":
+		// Example ticket status creation
+		status := &models.TicketStatus{
+			Name: "Example Status",
+		}
+		created, err := service.Create(ctx, status)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example ticket status update
+		status := &models.TicketStatus{
+			Name: "Updated Status",
+		}
+		updated, err := service.Update(ctx, id, status)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleTicketTypes handles ticket type-related actions
+func handleTicketTypes(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.TicketTypes
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		ticketType, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(ticketType)
+
+	case "list":
+		ticketTypes, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(ticketTypes)
+
+	case "create":
+		// Example ticket type creation
+		ticketType := &models.TicketType{
+			Name: "Example Type",
+		}
+		created, err := service.Create(ctx, ticketType)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example ticket type update
+		ticketType := &models.TicketType{
+			Name: "Updated Type",
+		}
+		updated, err := service.Update(ctx, id, ticketType)
 		if err != nil {
 			log.Fatal(err)
 		}
