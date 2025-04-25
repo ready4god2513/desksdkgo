@@ -48,6 +48,10 @@ func main() {
 		handleTicketStatuses(ctx, c, *action, *id)
 	case "tickettypes":
 		handleTicketTypes(ctx, c, *action, *id)
+	case "helpdocsites":
+		handleHelpDocSites(ctx, c, *action, *id)
+	case "helpdocarticles":
+		handleHelpDocArticles(ctx, c, *action, *id)
 	default:
 		log.Fatalf("Unsupported resource: %s", *resource)
 	}
@@ -419,6 +423,114 @@ func handleTicketTypes(ctx context.Context, c *client.Client, action string, id 
 			Name: "Updated Type",
 		}
 		updated, err := service.Update(ctx, id, ticketType)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleHelpDocSites handles help doc site-related actions
+func handleHelpDocSites(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.HelpDocSites
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		site, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(site)
+
+	case "list":
+		sites, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(sites)
+
+	case "create":
+		// Example help doc site creation
+		site := &models.HelpDocSite{
+			Name: "Example Site",
+		}
+		created, err := service.Create(ctx, site)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example help doc site update
+		site := &models.HelpDocSite{
+			Name: "Updated Site",
+		}
+		updated, err := service.Update(ctx, id, site)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleHelpDocArticles handles help doc article-related actions
+func handleHelpDocArticles(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.HelpDocArticles
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		article, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(article)
+
+	case "list":
+		articles, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(articles)
+
+	case "create":
+		// Example help doc article creation
+		article := &models.HelpDocArticle{
+			Title:    "Example Article",
+			Contents: "This is an example help doc article.",
+			Status:   "published",
+		}
+		created, err := service.Create(ctx, article)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example help doc article update
+		article := &models.HelpDocArticle{
+			Title:    "Updated Article",
+			Contents: "This is an updated help doc article.",
+			Status:   "published",
+		}
+		updated, err := service.Update(ctx, id, article)
 		if err != nil {
 			log.Fatal(err)
 		}

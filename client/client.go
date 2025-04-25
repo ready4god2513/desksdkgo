@@ -21,13 +21,15 @@ type Client struct {
 	httpClient *http.Client
 
 	// Services
-	Tickets        *TicketService
-	Users          *UserService
-	Customers      *CustomerService
-	Companies      *CompanyService
-	Tags           *TagService
-	TicketStatuses *TicketStatusService
-	TicketTypes    *TicketTypeService
+	Tickets         *TicketService
+	Users           *UserService
+	Customers       *CustomerService
+	Companies       *CompanyService
+	Tags            *TagService
+	TicketStatuses  *TicketStatusService
+	TicketTypes     *TicketTypeService
+	HelpDocSites    *HelpDocSiteService
+	HelpDocArticles *HelpDocArticleService
 }
 
 // Config represents the client configuration
@@ -83,6 +85,8 @@ func NewClient(baseURL string, opts ...Option) *Client {
 	client.Tags = NewTagService(client)
 	client.TicketStatuses = NewTicketStatusService(client)
 	client.TicketTypes = NewTicketTypeService(client)
+	client.HelpDocSites = NewHelpDocSiteService(client)
+	client.HelpDocArticles = NewHelpDocArticleService(client)
 
 	return client
 }

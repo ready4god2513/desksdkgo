@@ -38,12 +38,18 @@ export DESK_ACTION="list"
 
 # Create a new customer
 ./desksdkgo --api-key "your-api-key" --resource customers --action create
+
+# List help doc sites
+./desksdkgo --api-key "your-api-key" --resource helpdocsites --action list
+
+# Create a help doc article
+./desksdkgo --api-key "your-api-key" --resource helpdocarticles --action create
 ```
 
 Available flags:
 - `--api-key`: Desk API key (required)
 - `--base-url`: Desk API base URL (default: "https://[yoursite].teamwork.com/desk/api/v2")
-- `--resource`: Resource to interact with (tickets, customers, companies, users)
+- `--resource`: Resource to interact with (tickets, customers, companies, users, tags, ticketstatuses, tickettypes, helpdocsites, helpdocarticles)
 - `--action`: Action to perform (get, list, create, update)
 - `--id`: Resource ID for get/update actions
 
@@ -80,6 +86,11 @@ The SDK provides services for different Teamwork Desk resources:
 - `Users`: Manage users
 - `Customers`: Manage customers
 - `Companies`: Manage companies
+- `Tags`: Manage tags
+- `TicketStatuses`: Manage ticket statuses
+- `TicketTypes`: Manage ticket types
+- `HelpDocSites`: Manage help doc sites
+- `HelpDocArticles`: Manage help doc articles
 
 Each service provides the following methods:
 
