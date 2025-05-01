@@ -48,10 +48,16 @@ func main() {
 		handleTicketStatuses(ctx, c, *action, *id)
 	case "tickettypes":
 		handleTicketTypes(ctx, c, *action, *id)
+	case "ticketpriorities":
+		handleTicketPriorities(ctx, c, *action, *id)
 	case "helpdocsites":
 		handleHelpDocSites(ctx, c, *action, *id)
 	case "helpdocarticles":
 		handleHelpDocArticles(ctx, c, *action, *id)
+	case "businesshours":
+		handleBusinessHours(ctx, c, *action, *id)
+	case "slas":
+		handleSLAs(ctx, c, *action, *id)
 	default:
 		log.Fatalf("Unsupported resource: %s", *resource)
 	}
@@ -107,6 +113,110 @@ func handleTickets(ctx context.Context, c *client.Client, action string, id int)
 			Subject: "Updated Ticket",
 		}
 		updated, err := service.Update(ctx, id, ticket)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleBusinessHours handles business hour related actions
+func handleBusinessHours(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.BusinessHours
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		businesshour, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(businesshour)
+
+	case "list":
+		businesshours, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(businesshours)
+
+	case "create":
+		// Example businesshour creation
+		businesshour := &models.BusinessHour{
+			Name: "Test Business Hour",
+		}
+		created, err := service.Create(ctx, businesshour)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example businesshour update
+		businesshour := &models.BusinessHour{
+			Name: "Test Business Hour",
+		}
+		updated, err := service.Update(ctx, id, businesshour)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleSLAs handles business hour related actions
+func handleSLAs(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.SLAs
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		sla, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(sla)
+
+	case "list":
+		slas, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(slas)
+
+	case "create":
+		// Example sla creation
+		sla := &models.SLA{
+			Name: "Test SLA",
+		}
+		created, err := service.Create(ctx, sla)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example sla update
+		sla := &models.SLA{
+			Name: "Test SLA",
+		}
+		updated, err := service.Update(ctx, id, sla)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -423,6 +533,58 @@ func handleTicketTypes(ctx context.Context, c *client.Client, action string, id 
 			Name: "Updated Type",
 		}
 		updated, err := service.Update(ctx, id, ticketType)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(updated)
+
+	default:
+		log.Fatalf("Unsupported action: %s", action)
+	}
+}
+
+// handleTicketPriorities handles ticket type-related actions
+func handleTicketPriorities(ctx context.Context, c *client.Client, action string, id int) {
+	service := c.TicketPriorities
+
+	switch strings.ToLower(action) {
+	case "get":
+		if id == 0 {
+			log.Fatal("ID is required for get action")
+		}
+		ticketPriority, err := service.Get(ctx, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(ticketPriority)
+
+	case "list":
+		ticketPrioritys, err := service.List(ctx, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(ticketPrioritys)
+
+	case "create":
+		// Example ticket type creation
+		ticketPriority := &models.TicketPriority{
+			Name: "Extremely Urgent",
+		}
+		created, err := service.Create(ctx, ticketPriority)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(os.Stdout).Encode(created)
+
+	case "update":
+		if id == 0 {
+			log.Fatal("ID is required for update action")
+		}
+		// Example ticket type update
+		ticketPriority := &models.TicketPriority{
+			Name: "Extremely Urgent",
+		}
+		updated, err := service.Update(ctx, id, ticketPriority)
 		if err != nil {
 			log.Fatal(err)
 		}

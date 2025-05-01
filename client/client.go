@@ -1,11 +1,7 @@
 package client
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -21,15 +17,18 @@ type Client struct {
 	httpClient *http.Client
 
 	// Services
-	Tickets         *TicketService
-	Users           *UserService
-	Customers       *CustomerService
-	Companies       *CompanyService
-	Tags            *TagService
-	TicketStatuses  *TicketStatusService
-	TicketTypes     *TicketTypeService
-	HelpDocSites    *HelpDocSiteService
-	HelpDocArticles *HelpDocArticleService
+	Tickets          *TicketService
+	Users            *UserService
+	Customers        *CustomerService
+	Companies        *CompanyService
+	Tags             *TagService
+	TicketStatuses   *TicketStatusService
+	TicketTypes      *TicketTypeService
+	TicketPriorities *TicketPriorityService
+	HelpDocSites     *HelpDocSiteService
+	HelpDocArticles  *HelpDocArticleService
+	BusinessHours    *BusinessHourService
+	SLAs             *SLAService
 }
 
 // Config represents the client configuration
@@ -87,6 +86,9 @@ func NewClient(baseURL string, opts ...Option) *Client {
 	client.TicketTypes = NewTicketTypeService(client)
 	client.HelpDocSites = NewHelpDocSiteService(client)
 	client.HelpDocArticles = NewHelpDocArticleService(client)
+	client.TicketPriorities = NewTicketPriorityService(client)
+	client.BusinessHours = NewBusinessHourService(client)
+	client.SLAs = NewSLAService(client)
 
 	return client
 }
@@ -148,31 +150,4 @@ func (o *ListOptions) Encode() string {
 	}
 
 	return v.Encode()
-}
-
-// encodeBody encodes the given value into a JSON body
-func encodeBody(v interface{}) (io.Reader, error) {
-	if v == nil {
-		return nil, nil
-	}
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(v); err != nil {
-		return nil, err
-	}
-
-	return &buf, nil
-}
-
-// decodeResponse decodes the response body into the given value
-func decodeResponse(resp *http.Response, v interface{}) error {
-	if resp.StatusCode >= 400 {
-		return fmt.Errorf("HTTP error: %s", resp.Status)
-	}
-
-	if v == nil {
-		return nil
-	}
-
-	return json.NewDecoder(resp.Body).Decode(v)
 }
