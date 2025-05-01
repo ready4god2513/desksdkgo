@@ -70,7 +70,9 @@ func (t *LoggingTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 // NewLoggingClient creates a new HTTP client with logging
 func NewLoggingClient(level logrus.Level) *http.Client {
 	logger := logrus.New()
-	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger.SetFormatter(&logrus.JSONFormatter{
+		PrettyPrint: true,
+	})
 	logger.SetLevel(level)
 
 	transport := &LoggingTransport{

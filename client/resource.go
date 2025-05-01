@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -95,7 +96,12 @@ func (s *Service[T, L]) Create(ctx context.Context, resource *T) (*T, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusCreated {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		b, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(b))
 	}
 
 	var createdResource T

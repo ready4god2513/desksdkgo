@@ -10,15 +10,17 @@ import (
 	"github.com/ready4god2513/desksdkgo/cli"
 	"github.com/ready4god2513/desksdkgo/client"
 	"github.com/ready4god2513/desksdkgo/models"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	// Define flags with environment variable fallbacks
 	apiKey := flag.String("api-key", getEnv("DESK_API_KEY", ""), "Desk API key (can also be set via DESK_API_KEY env var)")
-	baseURL := flag.String("base-url", getEnv("DESK_BASE_URL", "https://mycompany.teamwork.com/desk/api/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")
+	baseURL := flag.String("base-url", getEnv("DESK_BASE_URL", "https://api.desk.com/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")
 	resource := flag.String("resource", getEnv("DESK_RESOURCE", "tickets"), "Resource to interact with (tickets, customers, companies, users) (can also be set via DESK_RESOURCE env var)")
 	action := flag.String("action", getEnv("DESK_ACTION", "list"), "Action to perform (get, list, create, update) (can also be set via DESK_ACTION env var)")
 	id := flag.Int("id", 0, "Resource ID for get/update actions")
+	debug := flag.Bool("debug", false, "Enable debug logging")
 	flag.Parse()
 
 	// Validate required flags
@@ -27,7 +29,13 @@ func main() {
 	}
 
 	// Create client
-	c := client.NewClient(*baseURL, client.WithAPIKey(*apiKey))
+	opts := []client.Option{}
+	if *debug {
+		opts = append(opts, client.WithLogLevel(logrus.DebugLevel))
+	}
+	opts = append(opts, client.WithAPIKey(*apiKey))
+
+	c := client.NewClient(*baseURL, opts...)
 
 	// Create context
 	ctx := context.Background()
