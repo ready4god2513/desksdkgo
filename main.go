@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"log"
 	"os"
 	"strings"
 
+	"github.com/ready4god2513/desksdkgo/cli"
 	"github.com/ready4god2513/desksdkgo/client"
 	"github.com/ready4god2513/desksdkgo/models"
 )
@@ -15,7 +15,7 @@ import (
 func main() {
 	// Define flags with environment variable fallbacks
 	apiKey := flag.String("api-key", getEnv("DESK_API_KEY", ""), "Desk API key (can also be set via DESK_API_KEY env var)")
-	baseURL := flag.String("base-url", getEnv("DESK_BASE_URL", "https://api.desk.com/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")
+	baseURL := flag.String("base-url", getEnv("DESK_BASE_URL", "https://mycompany.teamwork.com/desk/api/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")
 	resource := flag.String("resource", getEnv("DESK_RESOURCE", "tickets"), "Resource to interact with (tickets, customers, companies, users) (can also be set via DESK_RESOURCE env var)")
 	action := flag.String("action", getEnv("DESK_ACTION", "list"), "Action to perform (get, list, create, update) (can also be set via DESK_ACTION env var)")
 	id := flag.Int("id", 0, "Resource ID for get/update actions")
@@ -35,29 +35,53 @@ func main() {
 	// Execute action based on resource and action
 	switch strings.ToLower(*resource) {
 	case "tickets":
-		handleTickets(ctx, c, *action, *id)
+		cli.Call(ctx, c.Tickets, *action, *id, func() *models.Ticket {
+			return &models.Ticket{Subject: "Test Ticket"}
+		})
 	case "customers":
-		handleCustomers(ctx, c, *action, *id)
+		cli.Call(ctx, c.Customers, *action, *id, func() *models.Customer {
+			return &models.Customer{FirstName: "Test", LastName: "Customer"}
+		})
 	case "companies":
-		handleCompanies(ctx, c, *action, *id)
+		cli.Call(ctx, c.Companies, *action, *id, func() *models.Company {
+			return &models.Company{Name: "Test Company"}
+		})
 	case "users":
-		handleUsers(ctx, c, *action, *id)
+		cli.Call(ctx, c.Users, *action, *id, func() *models.User {
+			return &models.User{FirstName: "Test", LastName: "User"}
+		})
 	case "tags":
-		handleTags(ctx, c, *action, *id)
+		cli.Call(ctx, c.Tags, *action, *id, func() *models.Tag {
+			return &models.Tag{Name: "Test Tag"}
+		})
 	case "ticketstatuses":
-		handleTicketStatuses(ctx, c, *action, *id)
+		cli.Call(ctx, c.TicketStatuses, *action, *id, func() *models.TicketStatus {
+			return &models.TicketStatus{Name: "Test Status"}
+		})
 	case "tickettypes":
-		handleTicketTypes(ctx, c, *action, *id)
+		cli.Call(ctx, c.TicketTypes, *action, *id, func() *models.TicketType {
+			return &models.TicketType{Name: "Test Type"}
+		})
 	case "ticketpriorities":
-		handleTicketPriorities(ctx, c, *action, *id)
+		cli.Call(ctx, c.TicketPriorities, *action, *id, func() *models.TicketPriority {
+			return &models.TicketPriority{Name: "Test Priority"}
+		})
 	case "helpdocsites":
-		handleHelpDocSites(ctx, c, *action, *id)
+		cli.Call(ctx, c.HelpDocSites, *action, *id, func() *models.HelpDocSite {
+			return &models.HelpDocSite{Name: "Test Site"}
+		})
 	case "helpdocarticles":
-		handleHelpDocArticles(ctx, c, *action, *id)
+		cli.Call(ctx, c.HelpDocArticles, *action, *id, func() *models.HelpDocArticle {
+			return &models.HelpDocArticle{Title: "Test Article"}
+		})
 	case "businesshours":
-		handleBusinessHours(ctx, c, *action, *id)
+		cli.Call(ctx, c.BusinessHours, *action, *id, func() *models.BusinessHour {
+			return &models.BusinessHour{Name: "Test Business Hour"}
+		})
 	case "slas":
-		handleSLAs(ctx, c, *action, *id)
+		cli.Call(ctx, c.SLAs, *action, *id, func() *models.SLA {
+			return &models.SLA{Name: "Test SLA"}
+		})
 	default:
 		log.Fatalf("Unsupported resource: %s", *resource)
 	}
@@ -69,636 +93,4 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
-}
-
-// handleTickets handles ticket-related actions
-func handleTickets(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.Tickets
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		ticket, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(ticket)
-
-	case "list":
-		tickets, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(tickets)
-
-	case "create":
-		// Example ticket creation
-		ticket := &models.Ticket{
-			Subject: "Test Ticket",
-		}
-		created, err := service.Create(ctx, ticket)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example ticket update
-		ticket := &models.Ticket{
-			Subject: "Updated Ticket",
-		}
-		updated, err := service.Update(ctx, id, ticket)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleBusinessHours handles business hour related actions
-func handleBusinessHours(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.BusinessHours
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		businesshour, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(businesshour)
-
-	case "list":
-		businesshours, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(businesshours)
-
-	case "create":
-		// Example businesshour creation
-		businesshour := &models.BusinessHour{
-			Name: "Test Business Hour",
-		}
-		created, err := service.Create(ctx, businesshour)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example businesshour update
-		businesshour := &models.BusinessHour{
-			Name: "Test Business Hour",
-		}
-		updated, err := service.Update(ctx, id, businesshour)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleSLAs handles business hour related actions
-func handleSLAs(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.SLAs
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		sla, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(sla)
-
-	case "list":
-		slas, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(slas)
-
-	case "create":
-		// Example sla creation
-		sla := &models.SLA{
-			Name: "Test SLA",
-		}
-		created, err := service.Create(ctx, sla)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example sla update
-		sla := &models.SLA{
-			Name: "Test SLA",
-		}
-		updated, err := service.Update(ctx, id, sla)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleCustomers handles customer-related actions
-func handleCustomers(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.Customers
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		customer, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(customer)
-
-	case "list":
-		customers, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(customers)
-
-	case "create":
-		// Example customer creation
-		customer := &models.Customer{
-			FirstName: "John",
-			LastName:  "Doe",
-			Email:     "john.doe@example.com",
-		}
-		created, err := service.Create(ctx, customer)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example customer update
-		customer := &models.Customer{
-			FirstName: "Jane",
-		}
-		updated, err := service.Update(ctx, id, customer)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleCompanies handles company-related actions
-func handleCompanies(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.Companies
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		company, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(company)
-
-	case "list":
-		companies, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(companies)
-
-	case "create":
-		// Example company creation
-		company := &models.Company{
-			Name: "Example Corp",
-		}
-		created, err := service.Create(ctx, company)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example company update
-		company := &models.Company{
-			Name: "Updated Corp",
-		}
-		updated, err := service.Update(ctx, id, company)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleUsers handles user-related actions
-func handleUsers(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.Users
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		user, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(user)
-
-	case "list":
-		users, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(users)
-
-	case "create":
-		// Example user creation
-		user := &models.User{
-			FirstName: "John",
-			LastName:  "Doe",
-			Email:     "john.doe@example.com",
-		}
-		created, err := service.Create(ctx, user)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example user update
-		user := &models.User{
-			FirstName: "Jane",
-		}
-		updated, err := service.Update(ctx, id, user)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleTags handles tag-related actions
-func handleTags(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.Tags
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		tag, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(tag)
-
-	case "list":
-		tags, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(tags)
-
-	case "create":
-		// Example tag creation
-		tag := &models.Tag{
-			Name: "Example Tag",
-		}
-		created, err := service.Create(ctx, tag)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example tag update
-		tag := &models.Tag{
-			Name: "Updated Tag",
-		}
-		updated, err := service.Update(ctx, id, tag)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleTicketStatuses handles ticket status-related actions
-func handleTicketStatuses(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.TicketStatuses
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		status, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(status)
-
-	case "list":
-		statuses, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(statuses)
-
-	case "create":
-		// Example ticket status creation
-		status := &models.TicketStatus{
-			Name: "Example Status",
-		}
-		created, err := service.Create(ctx, status)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example ticket status update
-		status := &models.TicketStatus{
-			Name: "Updated Status",
-		}
-		updated, err := service.Update(ctx, id, status)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleTicketTypes handles ticket type-related actions
-func handleTicketTypes(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.TicketTypes
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		ticketType, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(ticketType)
-
-	case "list":
-		ticketTypes, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(ticketTypes)
-
-	case "create":
-		// Example ticket type creation
-		ticketType := &models.TicketType{
-			Name: "Example Type",
-		}
-		created, err := service.Create(ctx, ticketType)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example ticket type update
-		ticketType := &models.TicketType{
-			Name: "Updated Type",
-		}
-		updated, err := service.Update(ctx, id, ticketType)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleTicketPriorities handles ticket type-related actions
-func handleTicketPriorities(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.TicketPriorities
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		ticketPriority, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(ticketPriority)
-
-	case "list":
-		ticketPrioritys, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(ticketPrioritys)
-
-	case "create":
-		// Example ticket type creation
-		ticketPriority := &models.TicketPriority{
-			Name: "Extremely Urgent",
-		}
-		created, err := service.Create(ctx, ticketPriority)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example ticket type update
-		ticketPriority := &models.TicketPriority{
-			Name: "Extremely Urgent",
-		}
-		updated, err := service.Update(ctx, id, ticketPriority)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleHelpDocSites handles help doc site-related actions
-func handleHelpDocSites(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.HelpDocSites
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		site, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(site)
-
-	case "list":
-		sites, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(sites)
-
-	case "create":
-		// Example help doc site creation
-		site := &models.HelpDocSite{
-			Name: "Example Site",
-		}
-		created, err := service.Create(ctx, site)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example help doc site update
-		site := &models.HelpDocSite{
-			Name: "Updated Site",
-		}
-		updated, err := service.Update(ctx, id, site)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
-}
-
-// handleHelpDocArticles handles help doc article-related actions
-func handleHelpDocArticles(ctx context.Context, c *client.Client, action string, id int) {
-	service := c.HelpDocArticles
-
-	switch strings.ToLower(action) {
-	case "get":
-		if id == 0 {
-			log.Fatal("ID is required for get action")
-		}
-		article, err := service.Get(ctx, id)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(article)
-
-	case "list":
-		articles, err := service.List(ctx, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(articles)
-
-	case "create":
-		// Example help doc article creation
-		article := &models.HelpDocArticle{
-			Title:    "Example Article",
-			Contents: "This is an example help doc article.",
-			Status:   "published",
-		}
-		created, err := service.Create(ctx, article)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(created)
-
-	case "update":
-		if id == 0 {
-			log.Fatal("ID is required for update action")
-		}
-		// Example help doc article update
-		article := &models.HelpDocArticle{
-			Title:    "Updated Article",
-			Contents: "This is an updated help doc article.",
-			Status:   "published",
-		}
-		updated, err := service.Update(ctx, id, article)
-		if err != nil {
-			log.Fatal(err)
-		}
-		json.NewEncoder(os.Stdout).Encode(updated)
-
-	default:
-		log.Fatalf("Unsupported action: %s", action)
-	}
 }
