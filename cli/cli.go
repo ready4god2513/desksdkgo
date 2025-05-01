@@ -19,6 +19,9 @@ type Service[T any, R any, L any] interface {
 
 // Call is a generic function to handle any resource type
 func Call[T any, R any, L any](ctx context.Context, service Service[T, R, L], action string, id int, createItem func() *T) {
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+
 	switch strings.ToLower(action) {
 	case "get":
 		if id == 0 {
@@ -28,14 +31,16 @@ func Call[T any, R any, L any](ctx context.Context, service Service[T, R, L], ac
 		if err != nil {
 			log.Fatal(err)
 		}
-		json.NewEncoder(os.Stdout).Encode(item)
+
+		enc.Encode(item)
 
 	case "list":
 		items, err := service.List(ctx, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
-		json.NewEncoder(os.Stdout).Encode(items)
+
+		enc.Encode(items)
 
 	case "create":
 		item := createItem()
@@ -43,7 +48,8 @@ func Call[T any, R any, L any](ctx context.Context, service Service[T, R, L], ac
 		if err != nil {
 			log.Fatal(err)
 		}
-		json.NewEncoder(os.Stdout).Encode(created)
+
+		enc.Encode(created)
 
 	case "update":
 		if id == 0 {
@@ -54,7 +60,7 @@ func Call[T any, R any, L any](ctx context.Context, service Service[T, R, L], ac
 		if err != nil {
 			log.Fatal(err)
 		}
-		json.NewEncoder(os.Stdout).Encode(updated)
+		enc.Encode(updated)
 
 	default:
 		log.Fatalf("Unsupported action: %s", action)
