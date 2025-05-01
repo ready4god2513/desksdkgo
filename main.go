@@ -16,7 +16,7 @@ import (
 func main() {
 	// Define flags with environment variable fallbacks
 	apiKey := flag.String("api-key", getEnv("DESK_API_KEY", ""), "Desk API key (can also be set via DESK_API_KEY env var)")
-	baseURL := flag.String("base-url", getEnv("DESK_BASE_URL", "https://api.desk.com/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")
+	baseURL := flag.String("base-url", getEnv("DESK_BASE_URL", "https://mycompany.teamwork.com/desk/api/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")
 	resource := flag.String("resource", getEnv("DESK_RESOURCE", "tickets"), "Resource to interact with (tickets, customers, companies, users) (can also be set via DESK_RESOURCE env var)")
 	action := flag.String("action", getEnv("DESK_ACTION", "list"), "Action to perform (get, list, create, update) (can also be set via DESK_ACTION env var)")
 	id := flag.Int("id", 0, "Resource ID for get/update actions")
