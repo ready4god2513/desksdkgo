@@ -30,11 +30,11 @@ func (s *CompanyService) List(ctx context.Context, params url.Values) (*models.C
 }
 
 // Create creates a new company
-func (s *CompanyService) Create(ctx context.Context, company *models.Company) (*models.CompanyResponse, error) {
-	return s.Service.Create(ctx, &models.CompanyResponse{Company: *company})
+func (s *CompanyService) Create(ctx context.Context, company *models.CompanyResponse) (*models.CompanyResponse, error) {
+	return s.Service.Create(ctx, company)
 }
 
 // Update updates an existing company
-func (s *CompanyService) Update(ctx context.Context, id int, company *models.Company) (*models.CompanyResponse, error) {
-	return s.Service.Update(ctx, id, &models.CompanyResponse{Company: *company})
+func (s *CompanyService) Update(ctx context.Context, id int, company *models.CompanyResponse) (*models.CompanyResponse, error) {
+	return s.Service.Update(ctx, id, company)
 }

@@ -30,11 +30,11 @@ func (s *TicketStatusService) List(ctx context.Context, params url.Values) (*mod
 }
 
 // Create creates a new ticketstatus
-func (s *TicketStatusService) Create(ctx context.Context, ticketstatus *models.TicketStatus) (*models.TicketStatusResponse, error) {
-	return s.Service.Create(ctx, &models.TicketStatusResponse{TicketStatus: *ticketstatus})
+func (s *TicketStatusService) Create(ctx context.Context, ticketstatus *models.TicketStatusResponse) (*models.TicketStatusResponse, error) {
+	return s.Service.Create(ctx, ticketstatus)
 }
 
 // Update updates an existing ticketstatus
-func (s *TicketStatusService) Update(ctx context.Context, id int, ticketstatus *models.TicketStatus) (*models.TicketStatusResponse, error) {
-	return s.Service.Update(ctx, id, &models.TicketStatusResponse{TicketStatus: *ticketstatus})
+func (s *TicketStatusService) Update(ctx context.Context, id int, ticketstatus *models.TicketStatusResponse) (*models.TicketStatusResponse, error) {
+	return s.Service.Update(ctx, id, ticketstatus)
 }

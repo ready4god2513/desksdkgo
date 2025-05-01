@@ -30,11 +30,11 @@ func (s *SLAService) List(ctx context.Context, params url.Values) (*models.SLAsR
 }
 
 // Create creates a new sla
-func (s *SLAService) Create(ctx context.Context, sla *models.SLA) (*models.SLAResponse, error) {
-	return s.Service.Create(ctx, &models.SLAResponse{SLA: *sla})
+func (s *SLAService) Create(ctx context.Context, sla *models.SLAResponse) (*models.SLAResponse, error) {
+	return s.Service.Create(ctx, sla)
 }
 
 // Update updates an existing sla
-func (s *SLAService) Update(ctx context.Context, id int, sla *models.SLA) (*models.SLAResponse, error) {
-	return s.Service.Update(ctx, id, &models.SLAResponse{SLA: *sla})
+func (s *SLAService) Update(ctx context.Context, id int, sla *models.SLAResponse) (*models.SLAResponse, error) {
+	return s.Service.Update(ctx, id, sla)
 }

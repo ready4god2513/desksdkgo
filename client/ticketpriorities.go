@@ -30,11 +30,11 @@ func (s *TicketPriorityService) List(ctx context.Context, params url.Values) (*m
 }
 
 // Create creates a new ticketpriority
-func (s *TicketPriorityService) Create(ctx context.Context, ticketpriority *models.TicketPriority) (*models.TicketPriorityResponse, error) {
-	return s.Service.Create(ctx, &models.TicketPriorityResponse{TicketPriority: *ticketpriority})
+func (s *TicketPriorityService) Create(ctx context.Context, ticketpriority *models.TicketPriorityResponse) (*models.TicketPriorityResponse, error) {
+	return s.Service.Create(ctx, ticketpriority)
 }
 
 // Update updates an existing ticketpriority
-func (s *TicketPriorityService) Update(ctx context.Context, id int, ticketpriority *models.TicketPriority) (*models.TicketPriorityResponse, error) {
-	return s.Service.Update(ctx, id, &models.TicketPriorityResponse{TicketPriority: *ticketpriority})
+func (s *TicketPriorityService) Update(ctx context.Context, id int, ticketpriority *models.TicketPriorityResponse) (*models.TicketPriorityResponse, error) {
+	return s.Service.Update(ctx, id, ticketpriority)
 }

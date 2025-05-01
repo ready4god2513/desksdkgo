@@ -43,52 +43,52 @@ func main() {
 	// Execute action based on resource and action
 	switch strings.ToLower(*resource) {
 	case "tickets":
-		cli.Call(ctx, c.Tickets, *action, *id, func() *models.Ticket {
-			return &models.Ticket{Subject: "Test Ticket"}
+		cli.Call(ctx, c.Tickets, *action, *id, func() *models.TicketResponse {
+			return &models.TicketResponse{Ticket: models.Ticket{Subject: "Test Ticket"}}
 		})
 	case "customers":
-		cli.Call(ctx, c.Customers, *action, *id, func() *models.Customer {
-			return &models.Customer{FirstName: "Test", LastName: "Customer"}
+		cli.Call(ctx, c.Customers, *action, *id, func() *models.CustomerResponse {
+			return &models.CustomerResponse{Customer: models.Customer{FirstName: "Test", LastName: "Customer"}}
 		})
 	case "companies":
-		cli.Call(ctx, c.Companies, *action, *id, func() *models.Company {
-			return &models.Company{Name: "Test Company"}
+		cli.Call(ctx, c.Companies, *action, *id, func() *models.CompanyResponse {
+			return &models.CompanyResponse{Company: models.Company{Name: "Test Company"}}
 		})
 	case "users":
-		cli.Call(ctx, c.Users, *action, *id, func() *models.User {
-			return &models.User{FirstName: "Test", LastName: "User"}
+		cli.Call(ctx, c.Users, *action, *id, func() *models.UserResponse {
+			return &models.UserResponse{User: models.User{FirstName: "Test", LastName: "User"}}
 		})
 	case "tags":
-		cli.Call(ctx, c.Tags, *action, *id, func() *models.Tag {
-			return &models.Tag{Name: "Test Tag"}
+		cli.Call(ctx, c.Tags, *action, *id, func() *models.TagResponse {
+			return &models.TagResponse{Tag: models.Tag{Name: "Test Tag"}}
 		})
 	case "ticketstatuses":
-		cli.Call(ctx, c.TicketStatuses, *action, *id, func() *models.TicketStatus {
-			return &models.TicketStatus{Name: "Test Status"}
+		cli.Call(ctx, c.TicketStatuses, *action, *id, func() *models.TicketStatusResponse {
+			return &models.TicketStatusResponse{TicketStatus: models.TicketStatus{Name: "Test Status"}}
 		})
 	case "tickettypes":
-		cli.Call(ctx, c.TicketTypes, *action, *id, func() *models.TicketType {
-			return &models.TicketType{Name: "Test Type"}
+		cli.Call(ctx, c.TicketTypes, *action, *id, func() *models.TicketTypeResponse {
+			return &models.TicketTypeResponse{TicketType: models.TicketType{Name: "Test Type"}}
 		})
 	case "ticketpriorities":
-		cli.Call(ctx, c.TicketPriorities, *action, *id, func() *models.TicketPriority {
-			return &models.TicketPriority{Name: "Test Priority"}
+		cli.Call(ctx, c.TicketPriorities, *action, *id, func() *models.TicketPriorityResponse {
+			return &models.TicketPriorityResponse{TicketPriority: models.TicketPriority{Name: "Test Priority"}}
 		})
 	case "helpdocsites":
-		cli.Call(ctx, c.HelpDocSites, *action, *id, func() *models.HelpDocSite {
-			return &models.HelpDocSite{Name: "Test Site"}
+		cli.Call(ctx, c.HelpDocSites, *action, *id, func() *models.HelpDocSiteResponse {
+			return &models.HelpDocSiteResponse{HelpDocSite: models.HelpDocSite{Name: "Test Site"}}
 		})
 	case "helpdocarticles":
-		cli.Call(ctx, c.HelpDocArticles, *action, *id, func() *models.HelpDocArticle {
-			return &models.HelpDocArticle{Title: "Test Article"}
+		cli.Call(ctx, c.HelpDocArticles, *action, *id, func() *models.HelpDocArticleResponse {
+			return &models.HelpDocArticleResponse{HelpDocArticle: models.HelpDocArticle{Title: "Test Article"}}
 		})
 	case "businesshours":
-		cli.Call(ctx, c.BusinessHours, *action, *id, func() *models.BusinessHour {
-			return &models.BusinessHour{Name: "Test Business Hour"}
+		cli.Call(ctx, c.BusinessHours, *action, *id, func() *models.BusinessHourResponse {
+			return &models.BusinessHourResponse{BusinessHour: models.BusinessHour{Name: "Test Business Hour"}}
 		})
 	case "slas":
-		cli.Call(ctx, c.SLAs, *action, *id, func() *models.SLA {
-			return &models.SLA{Name: "Test SLA"}
+		cli.Call(ctx, c.SLAs, *action, *id, func() *models.SLAResponse {
+			return &models.SLAResponse{SLA: models.SLA{Name: "Test SLA"}}
 		})
 	default:
 		log.Fatalf("Unsupported resource: %s", *resource)

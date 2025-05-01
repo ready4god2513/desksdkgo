@@ -30,11 +30,11 @@ func (s *BusinessHourService) List(ctx context.Context, params url.Values) (*mod
 }
 
 // Create creates a new businesshour
-func (s *BusinessHourService) Create(ctx context.Context, businesshour *models.BusinessHour) (*models.BusinessHourResponse, error) {
-	return s.Service.Create(ctx, &models.BusinessHourResponse{BusinessHour: *businesshour})
+func (s *BusinessHourService) Create(ctx context.Context, businesshour *models.BusinessHourResponse) (*models.BusinessHourResponse, error) {
+	return s.Service.Create(ctx, businesshour)
 }
 
 // Update updates an existing businesshour
-func (s *BusinessHourService) Update(ctx context.Context, id int, businesshour *models.BusinessHour) (*models.BusinessHourResponse, error) {
-	return s.Service.Update(ctx, id, &models.BusinessHourResponse{BusinessHour: *businesshour})
+func (s *BusinessHourService) Update(ctx context.Context, id int, businesshour *models.BusinessHourResponse) (*models.BusinessHourResponse, error) {
+	return s.Service.Update(ctx, id, businesshour)
 }

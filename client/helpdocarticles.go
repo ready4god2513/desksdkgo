@@ -30,11 +30,11 @@ func (s *HelpDocArticleService) List(ctx context.Context, params url.Values) (*m
 }
 
 // Create creates a new help doc article
-func (s *HelpDocArticleService) Create(ctx context.Context, article *models.HelpDocArticle) (*models.HelpDocArticleResponse, error) {
-	return s.Service.Create(ctx, &models.HelpDocArticleResponse{HelpDocArticle: *article})
+func (s *HelpDocArticleService) Create(ctx context.Context, article *models.HelpDocArticleResponse) (*models.HelpDocArticleResponse, error) {
+	return s.Service.Create(ctx, article)
 }
 
 // Update updates an existing help doc article
-func (s *HelpDocArticleService) Update(ctx context.Context, id int, article *models.HelpDocArticle) (*models.HelpDocArticleResponse, error) {
-	return s.Service.Update(ctx, id, &models.HelpDocArticleResponse{HelpDocArticle: *article})
+func (s *HelpDocArticleService) Update(ctx context.Context, id int, article *models.HelpDocArticleResponse) (*models.HelpDocArticleResponse, error) {
+	return s.Service.Update(ctx, id, article)
 }

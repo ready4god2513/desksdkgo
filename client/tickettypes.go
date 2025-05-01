@@ -30,11 +30,11 @@ func (s *TicketTypeService) List(ctx context.Context, params url.Values) (*model
 }
 
 // Create creates a new tickettype
-func (s *TicketTypeService) Create(ctx context.Context, tickettype *models.TicketType) (*models.TicketTypeResponse, error) {
-	return s.Service.Create(ctx, &models.TicketTypeResponse{TicketType: *tickettype})
+func (s *TicketTypeService) Create(ctx context.Context, tickettype *models.TicketTypeResponse) (*models.TicketTypeResponse, error) {
+	return s.Service.Create(ctx, tickettype)
 }
 
 // Update updates an existing tickettype
-func (s *TicketTypeService) Update(ctx context.Context, id int, tickettype *models.TicketType) (*models.TicketTypeResponse, error) {
-	return s.Service.Update(ctx, id, &models.TicketTypeResponse{TicketType: *tickettype})
+func (s *TicketTypeService) Update(ctx context.Context, id int, tickettype *models.TicketTypeResponse) (*models.TicketTypeResponse, error) {
+	return s.Service.Update(ctx, id, tickettype)
 }

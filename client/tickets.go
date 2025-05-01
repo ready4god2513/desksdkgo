@@ -30,11 +30,11 @@ func (s *TicketService) List(ctx context.Context, params url.Values) (*models.Ti
 }
 
 // Create creates a new ticket
-func (s *TicketService) Create(ctx context.Context, ticket *models.Ticket) (*models.TicketResponse, error) {
-	return s.Service.Create(ctx, &models.TicketResponse{Ticket: *ticket})
+func (s *TicketService) Create(ctx context.Context, ticket *models.TicketResponse) (*models.TicketResponse, error) {
+	return s.Service.Create(ctx, ticket)
 }
 
 // Update updates an existing ticket
-func (s *TicketService) Update(ctx context.Context, id int, ticket *models.Ticket) (*models.TicketResponse, error) {
-	return s.Service.Update(ctx, id, &models.TicketResponse{Ticket: *ticket})
+func (s *TicketService) Update(ctx context.Context, id int, ticket *models.TicketResponse) (*models.TicketResponse, error) {
+	return s.Service.Update(ctx, id, ticket)
 }

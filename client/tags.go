@@ -30,11 +30,11 @@ func (s *TagService) List(ctx context.Context, params url.Values) (*models.TagsR
 }
 
 // Create creates a new tag
-func (s *TagService) Create(ctx context.Context, tag *models.Tag) (*models.TagResponse, error) {
-	return s.Service.Create(ctx, &models.TagResponse{Tag: *tag})
+func (s *TagService) Create(ctx context.Context, tag *models.TagResponse) (*models.TagResponse, error) {
+	return s.Service.Create(ctx, tag)
 }
 
 // Update updates an existing tag
-func (s *TagService) Update(ctx context.Context, id int, tag *models.Tag) (*models.TagResponse, error) {
-	return s.Service.Update(ctx, id, &models.TagResponse{Tag: *tag})
+func (s *TagService) Update(ctx context.Context, id int, tag *models.TagResponse) (*models.TagResponse, error) {
+	return s.Service.Update(ctx, id, tag)
 }

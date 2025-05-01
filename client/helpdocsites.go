@@ -30,11 +30,11 @@ func (s *HelpDocSiteService) List(ctx context.Context, params url.Values) (*mode
 }
 
 // Create creates a new ticket
-func (s *HelpDocSiteService) Create(ctx context.Context, helpDocSite *models.HelpDocSite) (*models.HelpDocSiteResponse, error) {
-	return s.Service.Create(ctx, &models.HelpDocSiteResponse{HelpDocSite: *helpDocSite})
+func (s *HelpDocSiteService) Create(ctx context.Context, helpDocSite *models.HelpDocSiteResponse) (*models.HelpDocSiteResponse, error) {
+	return s.Service.Create(ctx, helpDocSite)
 }
 
 // Update updates an existing ticket
-func (s *HelpDocSiteService) Update(ctx context.Context, id int, helpDocSite *models.HelpDocSite) (*models.HelpDocSiteResponse, error) {
-	return s.Service.Update(ctx, id, &models.HelpDocSiteResponse{HelpDocSite: *helpDocSite})
+func (s *HelpDocSiteService) Update(ctx context.Context, id int, helpDocSite *models.HelpDocSiteResponse) (*models.HelpDocSiteResponse, error) {
+	return s.Service.Update(ctx, id, helpDocSite)
 }

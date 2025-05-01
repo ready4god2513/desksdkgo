@@ -30,11 +30,11 @@ func (s *CustomerService) List(ctx context.Context, params url.Values) (*models.
 }
 
 // Create creates a new customer
-func (s *CustomerService) Create(ctx context.Context, customer *models.Customer) (*models.CustomerResponse, error) {
-	return s.Service.Create(ctx, &models.CustomerResponse{Customer: *customer})
+func (s *CustomerService) Create(ctx context.Context, customer *models.CustomerResponse) (*models.CustomerResponse, error) {
+	return s.Service.Create(ctx, customer)
 }
 
 // Update updates an existing customer
-func (s *CustomerService) Update(ctx context.Context, id int, customer *models.Customer) (*models.CustomerResponse, error) {
-	return s.Service.Update(ctx, id, &models.CustomerResponse{Customer: *customer})
+func (s *CustomerService) Update(ctx context.Context, id int, customer *models.CustomerResponse) (*models.CustomerResponse, error) {
+	return s.Service.Update(ctx, id, customer)
 }
