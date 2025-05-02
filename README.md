@@ -1,15 +1,14 @@
-# Desk SDK for Go
+# Teamwork Desk Go SDK
 
-A Go client library for the Teamwork Desk API.
+A Go SDK for interacting with the Teamwork Desk API. This SDK provides a simple and intuitive way to interact with Teamwork Desk's REST API.
 
 ## Features
 
-- Full support for Teamwork Desk API v2
-- Type-safe API using Go generics
-- Comprehensive test coverage
-- Structured logging with logrus
-- Easy to use and extend
-- Command-line interface for common operations
+- Support for all major Teamwork Desk API endpoints
+- Simple and intuitive client interface
+- Built-in logging and debugging support
+- Command-line interface for quick operations
+- Environment variable support for configuration
 
 ## Installation
 
@@ -19,154 +18,117 @@ go get github.com/ready4god2513/desksdkgo
 
 ## Usage
 
+### Basic Client Usage
+
+```go
+package main
+
+import (
+    "context"
+    "github.com/ready4god2513/desksdkgo/client"
+    "github.com/sirupsen/logrus"
+)
+
+func main() {
+    // Create a new client
+    c := client.NewClient(
+        "https://yourcompany.teamwork.com/desk/api/v2",
+        client.WithAPIKey("your-api-key"), // Get this in your profile settings
+        client.WithLogLevel(logrus.DebugLevel),
+    )
+
+    // Use the client
+    ctx := context.Background()
+    
+    // List tickets
+    tickets, err := c.Tickets.List(ctx, nil)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Get a specific ticket
+    ticket, err := c.Tickets.Get(ctx, 123)
+    if err != nil {
+        panic(err)
+    }
+}
+```
+
+### Available Resources
+
+The SDK supports the following resources:
+
+- **Tickets**: Manage support tickets
+- **Customers**: Manage customer information
+- **Companies**: Manage company information
+- **Users**: Manage user accounts
+- **Tags**: Manage ticket tags
+- **Ticket Statuses**: Manage ticket statuses
+- **Ticket Types**: Manage ticket types
+- **Ticket Priorities**: Manage ticket priorities
+- **Help Doc Sites**: Manage help documentation sites
+- **Help Doc Articles**: Manage help documentation articles
+- **Business Hours**: Manage business hours
+- **SLAs**: Manage service level agreements
+
+Each resource supports the following operations:
+- `Get`: Retrieve a single resource by ID
+- `List`: Retrieve a list of resources with optional filters
+- `Create`: Create a new resource
+- `Update`: Update an existing resource
+
 ### Command Line Interface
 
-The SDK includes a command-line interface for common operations. You can use it with flags or environment variables:
+The SDK includes a command-line interface for quick operations:
 
 ```bash
-# Using flags
-./desksdkgo --api-key "your-api-key" --resource tickets --action list
-
-# Using environment variables
-export DESK_API_KEY="your-api-key"
-export DESK_RESOURCE="tickets"
-export DESK_ACTION="list"
-./desksdkgo
+# List tickets
+./desksdkgo --api-key YOUR_API_KEY --resource tickets --action list
 
 # Get a specific ticket
-./desksdkgo --api-key "your-api-key" --resource tickets --action get --id 123
+./desksdkgo --api-key YOUR_API_KEY --resource tickets --action get --id 123
 
-# Create a new customer
-./desksdkgo --api-key "your-api-key" --resource customers --action create
+# Create a new ticket
+./desksdkgo --api-key YOUR_API_KEY --resource tickets --action create --data '{"subject": "New Ticket", "description": "Ticket description"}'
 
-# List help doc sites
-./desksdkgo --api-key "your-api-key" --resource helpdocsites --action list
-
-# Create a help doc article
-./desksdkgo --api-key "your-api-key" --resource helpdocarticles --action create
+# Update a ticket
+./desksdkgo --api-key YOUR_API_KEY --resource tickets --action update --id 123 --data '{"status": "resolved"}'
 ```
 
-Available flags:
-- `--api-key`: Desk API key (required)
-- `--base-url`: Desk API base URL (default: "https://[yoursite].teamwork.com/desk/api/v2")
-- `--resource`: Resource to interact with (tickets, customers, companies, users, tags, ticketstatuses, tickettypes, helpdocsites, helpdocarticles)
-- `--action`: Action to perform (get, list, create, update)
+### Configuration
+
+The CLI supports the following configuration options:
+
+- `--api-key`: Teamwork Desk API key (required)
+- `--base-url`: Teamwork Desk API base URL (default: https://mycompany.teamwork.com/desk/api/v2)
+- `--resource`: Resource to interact with (default: tickets)
+- `--action`: Action to perform (get, list, create, update) (default: list)
 - `--id`: Resource ID for get/update actions
+- `--debug`: Enable debug logging
+- `--data`: JSON data to merge with default values for create/update actions
 
-Environment variables:
-- `DESK_API_KEY`: Desk API key
-- `DESK_BASE_URL`: Desk API base URL
-- `DESK_RESOURCE`: Resource to interact with
-- `DESK_ACTION`: Action to perform
+All configuration options can also be set via environment variables:
+- `DESK_API_KEY`
+- `DESK_BASE_URL`
+- `DESK_RESOURCE`
+- `DESK_ACTION`
 
-### Using as a Go Module
+### Filtering
 
-#### Creating a Client
-
-```go
-import "github.com/ready4god2513/desksdkgo/client"
-
-// Create a new client with default options
-deskClient := client.NewClient("https://[yoursite].teamwork.com/desk/api/v2")
-
-// Or with custom options
-deskClient := client.NewClient(
-    "https://[yoursite].teamwork.com/desk/api/v2",
-    client.WithAPIKey("your-api-key"),
-    client.WithHTTPClient(customHTTPClient),
-    client.WithLogLevel(logrus.InfoLevel),
-)
-```
-
-#### Using Services
-
-The SDK provides services for different Teamwork Desk resources:
-
-- `Tickets`: Manage tickets
-- `Users`: Manage users
-- `Customers`: Manage customers
-- `Companies`: Manage companies
-- `Tags`: Manage tags
-- `TicketStatuses`: Manage ticket statuses
-- `TicketTypes`: Manage ticket types
-- `HelpDocSites`: Manage help doc sites
-- `HelpDocArticles`: Manage help doc articles
-
-Each service provides the following methods:
-
-- `Get(ctx context.Context, id int)`: Get a single resource by ID
-- `List(ctx context.Context, params url.Values)`: List resources with optional filters
-- `Create(ctx context.Context, resource *T)`: Create a new resource
-- `Update(ctx context.Context, id int, resource *T)`: Update an existing resource
-
-#### List Options
-
-When listing resources, you can use the `ListOptions` struct to customize the results:
+The SDK includes a filter builder for creating complex queries:
 
 ```go
-options := &client.ListOptions{
-    Page:    1,           // Page number
-    PerPage: 50,          // Items per page
-    SortBy:  "created_at", // Field to sort by
-    SortDir: "desc",      // Sort direction (asc/desc)
-    Embed:   "customer",  // Related resources to include
-    Fields:  "id,subject", // Fields to return
-    Q:       "status:open", // Search query
-}
-
-// Convert options to URL values
-params := url.Values{}
-params.Set("page", strconv.Itoa(options.Page))
-// ... or use the Encode() method
-queryString := options.Encode()
-```
-
-#### Filtering
-
-The SDK supports MongoDB-style filtering through the `FilterBuilder`. This allows you to create complex filters using a fluent interface:
-
-```go
-// Simple equality filter
 filter := client.NewFilter().
     Eq("status", "open").
-    Build()
-
-// Complex filter with multiple conditions
-filter := client.NewFilter().
-    Gt("id", 2).
     And(
-        client.NewFilter().Eq("status", "open"),
-        client.NewFilter().Lt("priority", 3),
-    ).
-    Build()
+        client.NewFilter().Gt("created_at", "2023-01-01"),
+        client.NewFilter().Lt("created_at", "2023-12-31"),
+    )
 
-// Using OR conditions
-filter := client.NewFilter().
-    Or(
-        client.NewFilter().Eq("status", "open"),
-        client.NewFilter().Eq("status", "pending"),
-    ).
-    Build()
-
-// Using IN operator
-filter := client.NewFilter().
-    In("priority", 1, 2, 3).
-    Build()
-
-// Complex nested conditions
-filter := client.NewFilter().
-    Or(
-        client.NewFilter().Gt("age", 20),
-        client.NewFilter().Eq("name", "mike"),
-        client.NewFilter().And(
-            client.NewFilter().Gt("age", 12),
-            client.NewFilter().Lte("age", 18),
-        ),
-    ).
-    Build()
+tickets, err := c.Tickets.List(ctx, filter.Build())
 ```
 
-Available operators:
+Available filter operators:
 - `$eq`: Equal to
 - `$ne`: Not equal to
 - `$lt`: Less than
@@ -177,115 +139,6 @@ Available operators:
 - `$nin`: Not in list
 - `$and`: Logical AND
 - `$or`: Logical OR
-
-To use the filter in a request:
-
-```go
-params := url.Values{}
-params.Set("filter", filter)
-tickets, err := ticketService.List(ctx, params)
-```
-
-#### Error Handling
-
-The SDK provides comprehensive error handling:
-
-- HTTP errors (status codes >= 400) are returned as errors
-- JSON encoding/decoding errors are properly handled
-- Required parameters are validated
-- API key validation is performed
-
-Example error handling:
-
-```go
-ticket, err := ticketService.Get(ctx, 123)
-if err != nil {
-    if strings.Contains(err.Error(), "HTTP error: 404") {
-        log.Printf("Ticket not found")
-    } else if strings.Contains(err.Error(), "HTTP error: 401") {
-        log.Printf("Authentication failed")
-    } else {
-        log.Printf("Unexpected error: %v", err)
-    }
-    return
-}
-```
-
-Example:
-
-```go
-// Get the ticket service
-ticketService := deskClient.Tickets
-
-// Get a ticket
-ticket, err := ticketService.Get(context.Background(), 123)
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Printf("Got ticket: %+v\n", ticket)
-
-// List tickets with filters
-params := url.Values{}
-params.Set("status", "open")
-tickets, err := ticketService.List(context.Background(), params)
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Printf("Got %d tickets\n", len(tickets))
-
-// Create a customer
-customerService := deskClient.Customers
-customer := &models.Customer{
-    FirstName: "John",
-    LastName:  "Doe",
-    Email:     "john.doe@example.com",
-}
-created, err := customerService.Create(context.Background(), customer)
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Printf("Created customer: %+v\n", created)
-```
-
-#### Models
-
-The SDK includes type-safe models for all resources:
-
-```go
-import "github.com/ready4god2513/desksdkgo/models"
-
-// Ticket model
-ticket := &models.Ticket{
-    Subject: "Test Ticket",
-}
-
-// Customer model
-customer := &models.Customer{
-    FirstName: "John",
-    LastName:  "Doe",
-    Email:     "john.doe@example.com",
-}
-
-// Company model
-company := &models.Company{
-    Name: "Example Corp",
-}
-
-// User model
-user := &models.User{
-    FirstName: "John",
-    LastName:  "Doe",
-    Email:     "john.doe@example.com",
-}
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
 
 ## License
 
