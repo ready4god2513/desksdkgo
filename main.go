@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/ready4god2513/desksdkgo/cli"
 	"github.com/ready4god2513/desksdkgo/client"
 	"github.com/ready4god2513/desksdkgo/models"
@@ -54,7 +55,11 @@ func main() {
 	switch strings.ToLower(*resource) {
 	case "tickets":
 		cli.Call(ctx, c.Tickets, *action, *id, func() *models.TicketResponse {
-			resp := &models.TicketResponse{Ticket: models.Ticket{Subject: "Test Ticket"}}
+			resp := &models.TicketResponse{Ticket: models.Ticket{
+				Subject:           gofakeit.Sentence(5),
+				PreviewText:       gofakeit.Paragraph(1, 2, 3, " "),
+				OriginalRecipient: gofakeit.Email(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.Ticket, jsonData)
 			}
@@ -62,7 +67,11 @@ func main() {
 		})
 	case "customers":
 		cli.Call(ctx, c.Customers, *action, *id, func() *models.CustomerResponse {
-			resp := &models.CustomerResponse{Customer: models.Customer{FirstName: "Test", LastName: "Customer"}}
+			resp := &models.CustomerResponse{Customer: models.Customer{
+				FirstName: gofakeit.FirstName(),
+				LastName:  gofakeit.LastName(),
+				Email:     gofakeit.Email(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.Customer, jsonData)
 			}
@@ -70,7 +79,10 @@ func main() {
 		})
 	case "companies":
 		cli.Call(ctx, c.Companies, *action, *id, func() *models.CompanyResponse {
-			resp := &models.CompanyResponse{Company: models.Company{Name: "Test Company"}}
+			resp := &models.CompanyResponse{Company: models.Company{
+				Name:        gofakeit.Company(),
+				Description: gofakeit.Paragraph(1, 2, 3, " "),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.Company, jsonData)
 			}
@@ -78,7 +90,11 @@ func main() {
 		})
 	case "users":
 		cli.Call(ctx, c.Users, *action, *id, func() *models.UserResponse {
-			resp := &models.UserResponse{User: models.User{FirstName: "Test", LastName: "User"}}
+			resp := &models.UserResponse{User: models.User{
+				FirstName: gofakeit.FirstName(),
+				LastName:  gofakeit.LastName(),
+				Email:     gofakeit.Email(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.User, jsonData)
 			}
@@ -86,7 +102,9 @@ func main() {
 		})
 	case "tags":
 		cli.Call(ctx, c.Tags, *action, *id, func() *models.TagResponse {
-			resp := &models.TagResponse{Tag: models.Tag{Name: "Test Tag"}}
+			resp := &models.TagResponse{Tag: models.Tag{
+				Name: gofakeit.Word(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.Tag, jsonData)
 			}
@@ -94,7 +112,9 @@ func main() {
 		})
 	case "ticketstatuses":
 		cli.Call(ctx, c.TicketStatuses, *action, *id, func() *models.TicketStatusResponse {
-			resp := &models.TicketStatusResponse{TicketStatus: models.TicketStatus{Name: "Test Status"}}
+			resp := &models.TicketStatusResponse{TicketStatus: models.TicketStatus{
+				Name: gofakeit.Word(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.TicketStatus, jsonData)
 			}
@@ -102,7 +122,9 @@ func main() {
 		})
 	case "tickettypes":
 		cli.Call(ctx, c.TicketTypes, *action, *id, func() *models.TicketTypeResponse {
-			resp := &models.TicketTypeResponse{TicketType: models.TicketType{Name: "Test Type"}}
+			resp := &models.TicketTypeResponse{TicketType: models.TicketType{
+				Name: gofakeit.Word(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.TicketType, jsonData)
 			}
@@ -110,7 +132,10 @@ func main() {
 		})
 	case "ticketpriorities":
 		cli.Call(ctx, c.TicketPriorities, *action, *id, func() *models.TicketPriorityResponse {
-			resp := &models.TicketPriorityResponse{TicketPriority: models.TicketPriority{Name: "Test Priority"}}
+			resp := &models.TicketPriorityResponse{TicketPriority: models.TicketPriority{
+				Name:  gofakeit.Word(),
+				Color: gofakeit.Color(),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.TicketPriority, jsonData)
 			}
@@ -118,7 +143,9 @@ func main() {
 		})
 	case "helpdocsites":
 		cli.Call(ctx, c.HelpDocSites, *action, *id, func() *models.HelpDocSiteResponse {
-			resp := &models.HelpDocSiteResponse{HelpDocSite: models.HelpDocSite{Name: "Test Site"}}
+			resp := &models.HelpDocSiteResponse{HelpDocSite: models.HelpDocSite{
+				Name: gofakeit.Company() + " Help Center",
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.HelpDocSite, jsonData)
 			}
@@ -126,7 +153,10 @@ func main() {
 		})
 	case "helpdocarticles":
 		cli.Call(ctx, c.HelpDocArticles, *action, *id, func() *models.HelpDocArticleResponse {
-			resp := &models.HelpDocArticleResponse{HelpDocArticle: models.HelpDocArticle{Title: "Test Article"}}
+			resp := &models.HelpDocArticleResponse{HelpDocArticle: models.HelpDocArticle{
+				Title:    gofakeit.Sentence(5),
+				Contents: gofakeit.Paragraph(3, 5, 10, "\n"),
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.HelpDocArticle, jsonData)
 			}
@@ -134,7 +164,9 @@ func main() {
 		})
 	case "businesshours":
 		cli.Call(ctx, c.BusinessHours, *action, *id, func() *models.BusinessHourResponse {
-			resp := &models.BusinessHourResponse{BusinessHour: models.BusinessHour{Name: "Test Business Hour"}}
+			resp := &models.BusinessHourResponse{BusinessHour: models.BusinessHour{
+				Name: gofakeit.Company() + " Business Hours",
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.BusinessHour, jsonData)
 			}
@@ -142,7 +174,9 @@ func main() {
 		})
 	case "slas":
 		cli.Call(ctx, c.SLAs, *action, *id, func() *models.SLAResponse {
-			resp := &models.SLAResponse{SLA: models.SLA{Name: "Test SLA"}}
+			resp := &models.SLAResponse{SLA: models.SLA{
+				Name: gofakeit.Company() + " SLA Policy",
+			}}
 			if jsonData != nil {
 				mergeJSONData(&resp.SLA, jsonData)
 			}
