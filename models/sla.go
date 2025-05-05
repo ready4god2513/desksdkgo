@@ -6,7 +6,7 @@ type SLA struct {
 	Name             string      `json:"name"`
 	Description      string      `json:"description"`
 	DisplayOrder     int         `json:"displayOrder"`
-	BusinessHour     EntityRef   `json:"businesshours"`
+	BusinessHour     *EntityRef  `json:"businesshours,omitempty"`
 	Customers        []EntityRef `json:"customers"`
 	Companies        []EntityRef `json:"companies"`
 	Inboxes          []EntityRef `json:"inboxes"`
