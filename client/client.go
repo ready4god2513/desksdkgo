@@ -17,18 +17,19 @@ type Client struct {
 	httpClient *http.Client
 
 	// Services
-	Tickets          *TicketService
-	Users            *UserService
-	Customers        *CustomerService
+	BusinessHours    *BusinessHourService
 	Companies        *CompanyService
+	Customers        *CustomerService
+	HelpDocArticles  *HelpDocArticleService
+	HelpDocSites     *HelpDocSiteService
+	Inboxes          *InboxService
+	SLAs             *SLAService
 	Tags             *TagService
+	TicketPriorities *TicketPriorityService
+	Tickets          *TicketService
 	TicketStatuses   *TicketStatusService
 	TicketTypes      *TicketTypeService
-	TicketPriorities *TicketPriorityService
-	HelpDocSites     *HelpDocSiteService
-	HelpDocArticles  *HelpDocArticleService
-	BusinessHours    *BusinessHourService
-	SLAs             *SLAService
+	Users            *UserService
 }
 
 // Config represents the client configuration
@@ -77,18 +78,19 @@ func NewClient(baseURL string, opts ...Option) *Client {
 	}
 
 	// Initialize services
-	client.Tickets = NewTicketService(client)
-	client.Users = NewUserService(client)
-	client.Customers = NewCustomerService(client)
+	client.BusinessHours = NewBusinessHourService(client)
 	client.Companies = NewCompanyService(client)
+	client.Customers = NewCustomerService(client)
+	client.HelpDocArticles = NewHelpDocArticleService(client)
+	client.HelpDocSites = NewHelpDocSiteService(client)
+	client.Inboxes = NewInboxService(client)
+	client.SLAs = NewSLAService(client)
 	client.Tags = NewTagService(client)
+	client.TicketPriorities = NewTicketPriorityService(client)
+	client.Tickets = NewTicketService(client)
 	client.TicketStatuses = NewTicketStatusService(client)
 	client.TicketTypes = NewTicketTypeService(client)
-	client.HelpDocSites = NewHelpDocSiteService(client)
-	client.HelpDocArticles = NewHelpDocArticleService(client)
-	client.TicketPriorities = NewTicketPriorityService(client)
-	client.BusinessHours = NewBusinessHourService(client)
-	client.SLAs = NewSLAService(client)
+	client.Users = NewUserService(client)
 
 	return client
 }

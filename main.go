@@ -55,10 +55,21 @@ func main() {
 	switch strings.ToLower(*resource) {
 	case "tickets":
 		api.Call(ctx, c.Tickets, *action, *id, func() *models.TicketResponse {
+			inboxes, err := c.Inboxes.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list inboxes: %v", err)
+			}
+
+			if len(inboxes.Inboxes) == 0 {
+				log.Fatal("No inboxes found. Please create an inbox first.")
+			}
 			resp := &models.TicketResponse{Ticket: models.Ticket{
 				Subject:           gofakeit.Sentence(5),
 				PreviewText:       gofakeit.Paragraph(1, 2, 3, " "),
 				OriginalRecipient: gofakeit.Email(),
+				Inbox: models.EntityRef{
+					ID: inboxes.Inboxes[0].ID,
+				},
 			}}
 			if jsonData != nil {
 				util.MergeJSONData(&resp.Ticket, jsonData)
@@ -67,11 +78,25 @@ func main() {
 		})
 	case "customers":
 		api.Call(ctx, c.Customers, *action, *id, func() *models.CustomerResponse {
-			resp := &models.CustomerResponse{Customer: models.Customer{
-				FirstName: gofakeit.FirstName(),
-				LastName:  gofakeit.LastName(),
-				Email:     gofakeit.Email(),
-			}}
+			email := gofakeit.Email()
+			resp := &models.CustomerResponse{
+				Customer: models.Customer{
+					FirstName: gofakeit.FirstName(),
+					LastName:  gofakeit.LastName(),
+					Email:     email,
+				},
+				Included: models.IncludedData{
+					Contacts: []models.Contact{
+						{
+							BaseEntity: models.BaseEntity{
+								Type: "email",
+							},
+							Value:  email,
+							IsMain: true,
+						},
+					},
+				},
+			}
 			if jsonData != nil {
 				util.MergeJSONData(&resp.Customer, jsonData)
 			}
