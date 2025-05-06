@@ -1,5 +1,19 @@
 package models
 
+type SLANotificationType string
+
+const (
+	SLANotificationTypeFirstResponse  SLANotificationType = "firstResponse"
+	SLANotificationTypeReplyTime      SLANotificationType = "replyTime"
+	SLANotificationTypeResolutionTime SLANotificationType = "resolutionTime"
+)
+
+var ValidSLANotificationTypes = []string{
+	string(SLANotificationTypeFirstResponse),
+	string(SLANotificationTypeReplyTime),
+	string(SLANotificationTypeResolutionTime),
+}
+
 // SLA represents a SLA in the system
 type SLA struct {
 	BaseEntity
@@ -15,6 +29,23 @@ type SLA struct {
 	Tags             []EntityRef `json:"tags"`
 	Notifications    []EntityRef `json:"notifications"`
 	Threads          []EntityRef `json:"threads"`
+}
+
+type SLANotification struct {
+	BaseEntity
+	Description        string              `json:"description"`
+	Type               SLANotificationType `json:"type"`
+	Duration           int                 `json:"duration"`
+	User               *EntityRef          `json:"user,omitempty"`
+	NotifyAssignedUser bool                `json:"notify_assigned_user"`
+}
+
+type SLATicketPriority struct {
+	BaseEntity
+	Hours          int        `json:"hours"`
+	Minutes        int        `json:"minutes"`
+	Description    string     `json:"description"`
+	TicketPriority *EntityRef `json:"priority"`
 }
 
 // SLAsResponse represents the response for a list of slas

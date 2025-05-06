@@ -20,19 +20,21 @@ type PageMeta struct {
 
 // Common included data structure
 type IncludedData struct {
-	Companies        []Company        `json:"companies"`
-	Contacts         []Contact        `json:"contacts"`
-	Customers        []Customer       `json:"customers"`
-	Domains          []Domain         `json:"domains"`
-	Inboxes          []Inbox          `json:"inboxes"`
-	Messages         []Message        `json:"messages"`
-	Tags             []Tag            `json:"tags"`
-	Ticketactivities []TicketActivity `json:"ticketactivities"`
-	Ticketsources    []TicketSource   `json:"ticketsources"`
-	Ticketstatuses   []TicketStatus   `json:"ticketstatuses"`
-	Tickettypes      []TicketType     `json:"tickettypes"`
-	Timelogs         []TimeLog        `json:"timelogs"`
-	Users            []User           `json:"users"`
+	Companies        []Company           `json:"companies"`
+	Contacts         []Contact           `json:"contacts"`
+	Customers        []Customer          `json:"customers"`
+	Domains          []Domain            `json:"domains"`
+	Inboxes          []Inbox             `json:"inboxes"`
+	Messages         []Message           `json:"messages"`
+	SLANotifications []SLANotification   `json:"slanotifications"`
+	SLAPriorities    []SLATicketPriority `json:"slaticketpriorities"`
+	Tags             []Tag               `json:"tags"`
+	Ticketactivities []TicketActivity    `json:"ticketactivities"`
+	Ticketsources    []TicketSource      `json:"ticketsources"`
+	Ticketstatuses   []TicketStatus      `json:"ticketstatuses"`
+	Tickettypes      []TicketType        `json:"tickettypes"`
+	Timelogs         []TimeLog           `json:"timelogs"`
+	Users            []User              `json:"users"`
 }
 
 // Common meta structure

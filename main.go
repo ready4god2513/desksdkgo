@@ -208,9 +208,54 @@ func main() {
 		})
 	case "slas":
 		api.Call(ctx, c.SLAs, *action, *id, func() *models.SLAResponse {
-			resp := &models.SLAResponse{SLA: models.SLA{
-				Name: gofakeit.Company() + " SLA Policy",
-			}}
+			priorities, err := c.TicketPriorities.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list ticketpriorities: %v", err)
+			}
+
+			if len(priorities.TicketPriorities) == 0 {
+				log.Fatal("No ticketpriorities found. Please create a ticketpriority first.")
+			}
+
+			businesshours, err := c.BusinessHours.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list businesshours: %v", err)
+			}
+
+			if len(businesshours.BusinessHours) == 0 {
+				log.Fatal("No businesshours found. Please create a businesshour first.")
+			}
+
+			resp := &models.SLAResponse{
+				SLA: models.SLA{
+					Name: gofakeit.Company() + " SLA Policy",
+					BusinessHour: &models.EntityRef{
+						ID: businesshours.BusinessHours[0].ID,
+					},
+				},
+				Included: models.IncludedData{
+					SLANotifications: []models.SLANotification{
+						{
+							Description:        "SLA Notification",
+							Type:               models.SLANotificationTypeFirstResponse,
+							Duration:           gofakeit.Number(1, 10),
+							NotifyAssignedUser: true,
+						},
+					},
+				},
+			}
+
+			for _, priority := range priorities.TicketPriorities {
+				resp.Included.SLAPriorities = append(resp.Included.SLAPriorities, models.SLATicketPriority{
+					Hours:       gofakeit.Number(1, 10),
+					Minutes:     gofakeit.Number(1, 59),
+					Description: "SLA for " + priority.Name,
+					TicketPriority: &models.EntityRef{
+						ID: priority.ID,
+					},
+				})
+			}
+
 			if jsonData != nil {
 				util.MergeJSONData(&resp.SLA, jsonData)
 			}
