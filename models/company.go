@@ -23,6 +23,11 @@ type Company struct {
 	BaseEntity
 	Name        string      `json:"name"`
 	Description string      `json:"description,omitempty"`
+	Details     string      `json:"details"`
+	Industry    string      `json:"industry"`
+	Website     string      `json:"website"`
+	Permission  string      `json:"permission"`
+	Kind        string      `json:"kind"`
 	Domains     []EntityRef `json:"domains,omitempty"`
 	Note        string      `json:"note,omitempty"`
 }

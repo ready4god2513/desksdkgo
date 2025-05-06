@@ -23,6 +23,7 @@ type IncludedData struct {
 	Companies        []Company        `json:"companies"`
 	Contacts         []Contact        `json:"contacts"`
 	Customers        []Customer       `json:"customers"`
+	Domains          []Domain         `json:"domains"`
 	Inboxes          []Inbox          `json:"inboxes"`
 	Messages         []Message        `json:"messages"`
 	Tags             []Tag            `json:"tags"`

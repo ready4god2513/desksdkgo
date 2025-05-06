@@ -104,10 +104,19 @@ func main() {
 		})
 	case "companies":
 		api.Call(ctx, c.Companies, *action, *id, func() *models.CompanyResponse {
-			resp := &models.CompanyResponse{Company: models.Company{
-				Name:        gofakeit.Company(),
-				Description: gofakeit.Paragraph(1, 2, 3, " "),
-			}}
+			resp := &models.CompanyResponse{
+				Company: models.Company{
+					Name:        gofakeit.Company(),
+					Description: gofakeit.Paragraph(1, 2, 3, " "),
+				},
+				Included: models.IncludedData{
+					Domains: []models.Domain{
+						{
+							Name: gofakeit.DomainName(),
+						},
+					},
+				},
+			}
 			if jsonData != nil {
 				util.MergeJSONData(&resp.Company, jsonData)
 			}
