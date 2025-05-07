@@ -2,15 +2,24 @@ package models
 
 import "time"
 
+type State string
+
+const (
+	// StateActive represents an active state
+	StateActive State = "active"
+	// StateDeleted represents a deleted state
+	StateDeleted State = "deleted"
+)
+
 // Base types for common fields
 type BaseEntity struct {
-	ID        int       `json:"id"`
-	Type      any       `json:"type"` // Can be string or object
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedBy UserRef   `json:"createdBy"`
-	UpdatedBy UserRef   `json:"updatedBy"`
-	State     string    `json:"state"`
+	ID        int        `json:"id"`
+	Type      any        `json:"type"` // Can be string or object
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *UserRef   `json:"createdBy,omitempty"`
+	UpdatedBy *UserRef   `json:"updatedBy,omitempty"`
+	State     State      `json:"state"`
 }
 
 type UserRef struct {
