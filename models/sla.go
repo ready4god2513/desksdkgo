@@ -20,6 +20,7 @@ type SLA struct {
 	Name             string      `json:"name"`
 	Description      string      `json:"description"`
 	DisplayOrder     int         `json:"displayOrder"`
+	Enabled          bool        `json:"enabled"`
 	BusinessHour     *EntityRef  `json:"businesshours,omitempty"`
 	Customers        []EntityRef `json:"customers"`
 	Companies        []EntityRef `json:"companies"`
