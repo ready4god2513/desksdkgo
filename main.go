@@ -16,6 +16,9 @@ import (
 )
 
 func main() {
+	// Load environment variables from .env file
+	util.LoadEnv()
+
 	// Define flags with environment variable fallbacks
 	apiKey := flag.String("api-key", util.GetEnv("DESK_API_KEY", ""), "Desk API key (can also be set via DESK_API_KEY env var)")
 	baseURL := flag.String("base-url", util.GetEnv("DESK_BASE_URL", "https://mycompany.teamwork.com/desk/api/v2"), "Desk API base URL (can also be set via DESK_BASE_URL env var)")

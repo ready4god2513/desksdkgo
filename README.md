@@ -9,6 +9,7 @@ A Go SDK for interacting with the Teamwork Desk API. This SDK provides a simple 
 - Built-in logging and debugging support
 - Command-line interface for quick operations
 - Environment variable support for configuration
+- `.env` file support for easy configuration
 
 ## Installation
 
@@ -107,11 +108,44 @@ The CLI supports the following configuration options:
 - `--debug`: Enable debug logging
 - `--data`: JSON data to merge with default values for create/update actions
 
-All configuration options can also be set via environment variables:
+All configuration options can be set in multiple ways, in order of precedence:
+1. Command-line flags
+2. Environment variables
+3. `.env` file
+
+#### Environment Variables
+
+The following environment variables are supported:
 - `DESK_API_KEY`
 - `DESK_BASE_URL`
 - `DESK_RESOURCE`
 - `DESK_ACTION`
+- `DEBUG`
+
+#### .env File Support
+
+You can create a `.env` file in your project directory to set default values. Copy `.env.example` to `.env` and modify the values:
+
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit the .env file with your values
+```
+
+Example `.env` file:
+```env
+# Desk API Configuration
+DESK_API_KEY=your_api_key_here
+DESK_BASE_URL=https://yourcompany.teamwork.com/desk/api/v2
+
+# Default Resource and Action
+DESK_RESOURCE=tickets
+DESK_ACTION=list
+
+# Debug Mode (true/false)
+DEBUG=false
+```
 
 ### Filtering
 
