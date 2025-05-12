@@ -5,29 +5,29 @@ import "time"
 // Ticket related types
 type Ticket struct {
 	BaseEntity
-	Subject               string      `json:"subject"`
-	Readonly              bool        `json:"readonly"`
-	MessageCount          int         `json:"messageCount"`
-	PreviewText           string      `json:"previewText"`
-	OriginalRecipient     string      `json:"originalRecipient"`
-	ResponseTimeMins      int         `json:"responseTimeMins"`
-	ResolutionTimeMins    int         `json:"resolutionTimeMins"`
+	Activities            []EntityRef `json:"activities"`
+	Agent                 EntityRef   `json:"agent"`
+	Contact               EntityRef   `json:"contact"`
+	Customer              EntityRef   `json:"customer"`
 	HappinessSurveySentAt time.Time   `json:"happinessSurveySentAt"`
 	ImagesHidden          bool        `json:"imagesHidden"`
-	IsRead                bool        `json:"isRead"`
-	SpamScore             int         `json:"spam_score"`
-	SpamRules             any         `json:"spam_rules"`
-	Customer              EntityRef   `json:"customer"`
-	Contact               EntityRef   `json:"contact"`
 	Inbox                 EntityRef   `json:"inbox"`
-	Agent                 EntityRef   `json:"agent"`
-	Status                EntityRef   `json:"status"`
-	Source                EntityRef   `json:"source"`
-	Type                  EntityRef   `json:"type"`
+	IsRead                bool        `json:"isRead"`
+	MessageCount          int         `json:"messageCount"`
 	Messages              []EntityRef `json:"messages"`
-	Timelogs              []EntityRef `json:"timelogs"`
-	Activities            []EntityRef `json:"activities"`
+	OriginalRecipient     string      `json:"originalRecipient"`
+	PreviewText           string      `json:"previewText"`
+	Readonly              bool        `json:"readonly"`
+	ResolutionTimeMins    int         `json:"resolutionTimeMins"`
+	ResponseTimeMins      int         `json:"responseTimeMins"`
+	Source                EntityRef   `json:"source"`
+	SpamRules             any         `json:"spam_rules"`
+	SpamScore             int         `json:"spam_score"`
+	Status                EntityRef   `json:"status"`
+	Subject               string      `json:"subject"`
 	Suggestions           struct{}    `json:"suggestions"`
+	Timelogs              []EntityRef `json:"timelogs"`
+	Type                  EntityRef   `json:"type"`
 }
 
 // Response types for tickets
