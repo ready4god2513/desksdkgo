@@ -271,7 +271,8 @@ func main() {
 			for _, inbox := range inboxes.Inboxes {
 				resp.SLA.Inboxes = append(resp.SLA.Inboxes, models.EntityRef{
 					Meta: map[string]any{
-						"inbox": inbox.ID,
+						"inbox":           inbox.ID,
+						"conditionoption": "eq",
 					},
 				})
 			}
