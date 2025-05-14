@@ -220,6 +220,15 @@ func main() {
 				log.Fatal("No ticketpriorities found. Please create a ticketpriority first.")
 			}
 
+			inboxes, err := c.Inboxes.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list inboxes: %v", err)
+			}
+
+			if len(inboxes.Inboxes) == 0 {
+				log.Fatal("No inboxes found. Please create an inbox first.")
+			}
+
 			businesshours, err := c.BusinessHours.List(ctx, nil)
 			if err != nil {
 				log.Fatalf("Failed to list businesshours: %v", err)
@@ -255,6 +264,14 @@ func main() {
 					Description: "SLA for " + priority.Name,
 					TicketPriority: &models.EntityRef{
 						ID: priority.ID,
+					},
+				})
+			}
+
+			for _, inbox := range inboxes.Inboxes {
+				resp.SLA.Inboxes = append(resp.SLA.Inboxes, models.EntityRef{
+					Meta: map[string]any{
+						"inbox": inbox.ID,
 					},
 				})
 			}
