@@ -22,13 +22,13 @@ type SLA struct {
 	DisplayOrder     int         `json:"displayOrder"`
 	Enabled          bool        `json:"enabled"`
 	BusinessHour     *EntityRef  `json:"businesshours,omitempty"`
-	Customers        []EntityRef `json:"customers"`
-	Companies        []EntityRef `json:"companies"`
-	Inboxes          []EntityRef `json:"inboxes"`
-	TicketTypes      []EntityRef `json:"tickettypes"`
-	TicketPriorities []EntityRef `json:"ticketpriorities"`
-	Tags             []EntityRef `json:"tags"`
-	Notifications    []EntityRef `json:"notifications"`
+	Customers        []EntityRef `json:"slacustomers"`
+	Companies        []EntityRef `json:"slacompanies"`
+	Inboxes          []EntityRef `json:"slainboxes"`
+	TicketTypes      []EntityRef `json:"slatickettypes"`
+	TicketPriorities []EntityRef `json:"slaticketpriorities"`
+	Tags             []EntityRef `json:"slatags"`
+	Notifications    []EntityRef `json:"slanotifications"`
 	Threads          []EntityRef `json:"threads"`
 }
 

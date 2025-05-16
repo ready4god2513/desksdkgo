@@ -268,6 +268,12 @@ func main() {
 				})
 			}
 
+			resp.Included.SLAPriorities = append(resp.Included.SLAPriorities, models.SLATicketPriority{
+				Hours:       gofakeit.Number(1, 10),
+				Minutes:     gofakeit.Number(1, 59),
+				Description: "SLA for None",
+			})
+
 			for _, inbox := range inboxes.Inboxes {
 				resp.SLA.Inboxes = append(resp.SLA.Inboxes, models.EntityRef{
 					Meta: map[string]any{
