@@ -26,8 +26,12 @@ type IncludedData struct {
 	Domains          []Domain            `json:"domains"`
 	Inboxes          []Inbox             `json:"inboxes"`
 	Messages         []Message           `json:"messages"`
+	SLACustomers     []SLACustomer       `json:"slacustomers"`
+	SLACompanies     []SLACompany        `json:"slacompanies"`
+	SLAInboxes       []SLAInbox          `json:"slainboxes"`
 	SLANotifications []SLANotification   `json:"slanotifications"`
 	SLAPriorities    []SLATicketPriority `json:"slaticketpriorities"`
+	SLATags          []SLATag            `json:"slatags"`
 	Tags             []Tag               `json:"tags"`
 	Ticketactivities []TicketActivity    `json:"ticketactivities"`
 	Ticketsources    []TicketSource      `json:"ticketsources"`

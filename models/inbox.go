@@ -14,45 +14,45 @@ type Inbox struct {
 	HappinessRatingEnabled        bool         `json:"happinessRatingEnabled"`
 	HappinessRatingMessage        string       `json:"happinessRatingMessage"`
 	IconImage                     string       `json:"iconImage"`
+	Inboxaliases                  []EntityRef  `json:"inboxaliases"`
+	Inboxcnames                   []InboxCname `json:"inboxcnames"`
+	Inboxemailrefs                any          `json:"inboxemailrefs"`
+	IncludeTicketHistoryOnForward bool         `json:"includeTicketHistoryOnForward"`
 	IsAdmin                       bool         `json:"isAdmin"`
 	IsFreeDomain                  bool         `json:"isFreeDomain"`
 	LanguageCode                  string       `json:"languageCode"`
 	LocalPart                     string       `json:"localPart"`
 	Name                          string       `json:"name"`
 	NotificationsOnly             bool         `json:"notificationsOnly"`
+	Oauth2Token                   any          `json:"oauth2token"`
 	OnClosedLock                  string       `json:"onClosedLock"`
 	OnClosedWait                  int          `json:"onClosedWait"`
 	PublicIconImage               string       `json:"publicIconImage"`
+	Restricteddomains             any          `json:"restricteddomains"`
 	SendEmailsFrom                string       `json:"sendEmailsFrom"`
 	Signature                     string       `json:"signature"`
 	SMTPPassword                  string       `json:"smtpPassword"`
-	SMTPProvider                  string       `json:"smtpProvider"`
 	SMTPPort                      int          `json:"smtpPort"`
+	SMTPProvider                  string       `json:"smtpProvider"`
 	SMTPSecurity                  string       `json:"smtpSecurity"`
 	SMTPServer                    string       `json:"smtpServer"`
 	SMTPUsername                  string       `json:"smtpUsername"`
 	SpamThreshold                 int          `json:"spamThreshold"`
 	Starred                       bool         `json:"starred"`
-	Synced                        bool         `json:"synced"`
-	SyncDays                      any          `json:"syncDays"`
 	SyncAccountID                 any          `json:"syncAccountId"`
+	SyncDays                      any          `json:"syncDays"`
+	Synced                        bool         `json:"synced"`
 	SyncSubscriptionID            any          `json:"syncSubscriptionId"`
+	Ticketstatus                  EntityRef    `json:"ticketstatus"`
+	Tickettypes                   []EntityRef  `json:"tickettypes"`
 	TimeloggingEnabled            bool         `json:"timeloggingEnabled"`
+	Triggers                      []Trigger    `json:"triggers"`
 	Type                          string       `json:"type"`
+	User                          any          `json:"user"`
+	Users                         []InboxUser  `json:"users"`
 	UseTeamworkMailServer         bool         `json:"useTeamworkMailServer"`
 	UsingOfficeHours              bool         `json:"usingOfficeHours"`
 	Verified                      bool         `json:"verified"`
-	IncludeTicketHistoryOnForward bool         `json:"includeTicketHistoryOnForward"`
-	User                          any          `json:"user"`
-	Users                         []InboxUser  `json:"users"`
-	Inboxaliases                  []EntityRef  `json:"inboxaliases"`
-	Ticketstatus                  EntityRef    `json:"ticketstatus"`
-	Inboxemailrefs                any          `json:"inboxemailrefs"`
-	Triggers                      []Trigger    `json:"triggers"`
-	Tickettypes                   []EntityRef  `json:"tickettypes"`
-	Inboxcnames                   []InboxCname `json:"inboxcnames"`
-	Oauth2Token                   any          `json:"oauth2token"`
-	Restricteddomains             any          `json:"restricteddomains"`
 }
 
 type InboxesResponse struct {
@@ -69,12 +69,14 @@ type InboxResponse struct {
 
 type InboxUser struct {
 	EntityRef
-	Meta struct {
-		Access  string `json:"access"`
-		IsAdmin bool   `json:"isAdmin"`
-		Starred bool   `json:"starred"`
-		State   string `json:"state"`
-	} `json:"meta"`
+	Meta InboxMeta `json:"meta"`
+}
+
+type InboxMeta struct {
+	Access  string `json:"access"`
+	IsAdmin bool   `json:"isAdmin"`
+	Starred bool   `json:"starred"`
+	State   string `json:"state"`
 }
 
 type Trigger struct {

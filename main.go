@@ -209,6 +209,39 @@ func main() {
 			}
 			return resp
 		})
+
+	case "inboxes":
+		api.Call(ctx, c.Inboxes, *action, *id, func() *models.InboxResponse {
+			users, err := c.Users.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list users: %v", err)
+			}
+			if len(users.Users) == 0 {
+				log.Fatal("No users found. Please create a user first.")
+			}
+
+			resp := &models.InboxResponse{Inbox: models.Inbox{
+				Name:      gofakeit.Company() + " Inbox",
+				Email:     gofakeit.Email(),
+				LocalPart: strings.SplitN(gofakeit.Email(), "@", 2)[0],
+			}}
+
+			for _, user := range users.Users {
+				resp.Inbox.Users = append(resp.Inbox.Users, models.InboxUser{
+					EntityRef: models.EntityRef{
+						ID: user.ID,
+					},
+					Meta: models.InboxMeta{
+						Access: "write",
+					},
+				})
+			}
+
+			if jsonData != nil {
+				util.MergeJSONData(&resp.Inbox, jsonData)
+			}
+			return resp
+		})
 	case "slas":
 		api.Call(ctx, c.SLAs, *action, *id, func() *models.SLAResponse {
 			priorities, err := c.TicketPriorities.List(ctx, nil)
@@ -218,6 +251,33 @@ func main() {
 
 			if len(priorities.TicketPriorities) == 0 {
 				log.Fatal("No ticketpriorities found. Please create a ticketpriority first.")
+			}
+
+			tags, err := c.Tags.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list tags: %v", err)
+			}
+
+			if len(tags.Tags) == 0 {
+				log.Fatal("No tags found. Please create a tag first.")
+			}
+
+			companies, err := c.Companies.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list companies: %v", err)
+			}
+
+			if len(companies.Companies) == 0 {
+				log.Fatal("No companies found. Please create a company first.")
+			}
+
+			customers, err := c.Customers.List(ctx, nil)
+			if err != nil {
+				log.Fatalf("Failed to list customers: %v", err)
+			}
+
+			if len(customers.Customers) == 0 {
+				log.Fatal("No customers found. Please create a customer first.")
 			}
 
 			inboxes, err := c.Inboxes.List(ctx, nil)
@@ -275,12 +335,55 @@ func main() {
 			})
 
 			for _, inbox := range inboxes.Inboxes {
-				resp.SLA.Inboxes = append(resp.SLA.Inboxes, models.EntityRef{
-					Meta: map[string]any{
-						"inbox":           inbox.ID,
-						"conditionoption": "eq",
+				resp.Included.SLAInboxes = append(resp.Included.SLAInboxes, models.SLAInbox{
+					Inbox: &models.EntityRef{
+						ID: inbox.ID,
 					},
+					Condition: models.SLAConditionOptionEqual,
 				})
+
+				if len(resp.Included.SLAInboxes) > 4 {
+					break
+				}
+			}
+
+			for _, company := range companies.Companies {
+				resp.Included.SLACompanies = append(resp.Included.SLACompanies, models.SLACompany{
+					Company: &models.EntityRef{
+						ID: company.ID,
+					},
+					Condition: models.SLAConditionOptionEqual,
+				})
+
+				if len(resp.Included.SLACompanies) > 4 {
+					break
+				}
+			}
+
+			for _, customer := range customers.Customers {
+				resp.Included.SLACustomers = append(resp.Included.SLACustomers, models.SLACustomer{
+					Customer: &models.EntityRef{
+						ID: customer.ID,
+					},
+					Condition: models.SLAConditionOptionEqual,
+				})
+
+				if len(resp.Included.SLACustomers) > 3 {
+					break
+				}
+			}
+
+			for _, tag := range tags.Tags {
+				resp.Included.SLATags = append(resp.Included.SLATags, models.SLATag{
+					Tag: &models.EntityRef{
+						ID: tag.ID,
+					},
+					Condition: models.SLAConditionOptionEqual,
+				})
+
+				if len(resp.Included.SLATags) > 6 {
+					break
+				}
 			}
 
 			if jsonData != nil {

@@ -14,6 +14,13 @@ var ValidSLANotificationTypes = []string{
 	string(SLANotificationTypeResolutionTime),
 }
 
+type SLAConditionOption string
+
+const (
+	SLAConditionOptionEqual    SLAConditionOption = "eq"
+	SLAConditionOptionNotEqual SLAConditionOption = "ne"
+)
+
 // SLA represents a SLA in the system
 type SLA struct {
 	BaseEntity
@@ -47,6 +54,30 @@ type SLATicketPriority struct {
 	Minutes        int        `json:"minutes"`
 	Description    string     `json:"description"`
 	TicketPriority *EntityRef `json:"priority"`
+}
+
+type SLACustomer struct {
+	BaseEntity
+	Customer  *EntityRef         `json:"customer"`
+	Condition SLAConditionOption `json:"conditionoption" db:"conditionoption"`
+}
+
+type SLACompany struct {
+	BaseEntity
+	Company   *EntityRef         `json:"company"`
+	Condition SLAConditionOption `json:"conditionoption" db:"conditionoption"`
+}
+
+type SLAInbox struct {
+	BaseEntity
+	Inbox     *EntityRef         `json:"inbox"`
+	Condition SLAConditionOption `json:"conditionoption" db:"conditionoption"`
+}
+
+type SLATag struct {
+	BaseEntity
+	Tag       *EntityRef         `json:"tag"`
+	Condition SLAConditionOption `json:"conditionoption" db:"conditionoption"`
 }
 
 // SLAsResponse represents the response for a list of slas
