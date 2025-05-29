@@ -308,9 +308,15 @@ func main() {
 				Included: models.IncludedData{
 					SLANotifications: []models.SLANotification{
 						{
-							Description:        "SLA Notification",
+							Condition:          models.SLANotificationConditionTypeWarning,
 							Type:               models.SLANotificationTypeFirstResponse,
 							Duration:           gofakeit.Number(1, 10),
+							NotifyAssignedUser: true,
+						},
+						{
+							Condition:          models.SLANotificationConditionTypeBreach,
+							Type:               models.SLANotificationTypeFirstResponse,
+							Duration:           0,
 							NotifyAssignedUser: true,
 						},
 					},

@@ -1,5 +1,12 @@
 package models
 
+type SLANotificationConditionType string
+
+const (
+	SLANotificationConditionTypeWarning SLANotificationConditionType = "warning"
+	SLANotificationConditionTypeBreach  SLANotificationConditionType = "breach"
+)
+
 type SLANotificationType string
 
 const (
@@ -7,12 +14,6 @@ const (
 	SLANotificationTypeReplyTime      SLANotificationType = "replyTime"
 	SLANotificationTypeResolutionTime SLANotificationType = "resolutionTime"
 )
-
-var ValidSLANotificationTypes = []string{
-	string(SLANotificationTypeFirstResponse),
-	string(SLANotificationTypeReplyTime),
-	string(SLANotificationTypeResolutionTime),
-}
 
 type SLAConditionOption string
 
@@ -41,11 +42,11 @@ type SLA struct {
 
 type SLANotification struct {
 	BaseEntity
-	Description        string              `json:"description"`
-	Type               SLANotificationType `json:"type"`
-	Duration           int                 `json:"duration"`
-	User               *EntityRef          `json:"user,omitempty"`
-	NotifyAssignedUser bool                `json:"notify_assigned_user"`
+	Condition          SLANotificationConditionType `json:"condition" db:"condition"`
+	Type               SLANotificationType          `json:"type"`
+	Duration           int                          `json:"duration"`
+	User               *EntityRef                   `json:"user,omitempty"`
+	NotifyAssignedUser bool                         `json:"notify_assigned_user"`
 }
 
 type SLATicketPriority struct {
