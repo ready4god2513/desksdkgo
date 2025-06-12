@@ -46,7 +46,8 @@ func Call[T any, R any, L any](ctx context.Context, service Service[T, R, L], ac
 		item := createItem()
 		created, err := service.Create(ctx, item)
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
+			return
 		}
 
 		enc.Encode(created)
@@ -58,7 +59,8 @@ func Call[T any, R any, L any](ctx context.Context, service Service[T, R, L], ac
 		item := createItem()
 		updated, err := service.Update(ctx, id, item)
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
+			return
 		}
 		enc.Encode(updated)
 
