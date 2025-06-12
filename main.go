@@ -32,6 +32,14 @@ func main() {
 	data := flag.String("data", "", "JSON data to merge with default values for create/update actions")
 	flag.Parse()
 
+	if action == nil || *action == "" {
+		log.Fatal("Action is required. Set it via --action flag or DESK_ACTION environment variable")
+	}
+
+	if *action != "create" {
+		*count = 1 // For get/list/update actions, count should be 1
+	}
+
 	// Validate required flags
 	if *apiKey == "" {
 		log.Fatal("API key is required. Set it via --api-key flag or DESK_API_KEY environment variable")
@@ -58,7 +66,7 @@ func main() {
 	}
 
 	// Execute action based on resource and action
-	for i := 0; i < *count; i++ {
+	for range *count {
 		switch strings.ToLower(*resource) {
 		case "tickets":
 			api.Call(ctx, c.Tickets, *action, *id, func() *models.TicketResponse {
