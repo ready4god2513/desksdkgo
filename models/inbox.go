@@ -27,6 +27,7 @@ type Inbox struct {
 	Oauth2Token                   any          `json:"oauth2token"`
 	OnClosedLock                  string       `json:"onClosedLock"`
 	OnClosedWait                  int          `json:"onClosedWait"`
+	Projects                      []EntityRef  `json:"projects"`
 	PublicIconImage               string       `json:"publicIconImage"`
 	Restricteddomains             any          `json:"restricteddomains"`
 	SendEmailsFrom                string       `json:"sendEmailsFrom"`
